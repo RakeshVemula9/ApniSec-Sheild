@@ -1,62 +1,66 @@
 import { Resend } from "resend";
-import { Issue } from "@prisma/client";
 
 // Email Service class for Resend integration
 export class EmailService {
-    private resend: Resend;
-    private fromEmail: string;
+  private resend: Resend | null;
+  private fromEmail: string;
 
-    constructor() {
-        this.resend = new Resend(process.env.RESEND_API_KEY);
-        this.fromEmail = process.env.FROM_EMAIL || "onboarding@resend.dev";
+  constructor() {
+    // Don't throw if API key is missing
+    const apiKey = process.env.RESEND_API_KEY;
+    this.resend = apiKey ? new Resend(apiKey) : null;
+    this.fromEmail = process.env.FROM_EMAIL || "onboarding@resend.dev";
+  }
+
+  async sendWelcomeEmail(email: string, name: string): Promise<void> {
+    if (!this.resend) return;
+    try {
+      await this.resend.emails.send({
+        from: this.fromEmail,
+        to: email,
+        subject: "Welcome to ApniSec - Your Cybersecurity Partner",
+        html: this.getWelcomeEmailTemplate(name),
+      });
+    } catch (error) {
+      console.error("Failed to send welcome email:", error);
+      // Don't throw error - email failure shouldn't block registration
     }
+  }
 
-    async sendWelcomeEmail(email: string, name: string): Promise<void> {
-        try {
-            await this.resend.emails.send({
-                from: this.fromEmail,
-                to: email,
-                subject: "Welcome to ApniSec - Your Cybersecurity Partner",
-                html: this.getWelcomeEmailTemplate(name),
-            });
-        } catch (error) {
-            console.error("Failed to send welcome email:", error);
-            // Don't throw error - email failure shouldn't block registration
-        }
+  async sendIssueCreatedEmail(
+    email: string,
+    name: string,
+    issue: any
+  ): Promise<void> {
+    if (!this.resend) return;
+    try {
+      await this.resend.emails.send({
+        from: this.fromEmail,
+        to: email,
+        subject: `New Security Issue Created: ${issue.title}`,
+        html: this.getIssueCreatedTemplate(name, issue),
+      });
+    } catch (error) {
+      console.error("Failed to send issue created email:", error);
     }
+  }
 
-    async sendIssueCreatedEmail(
-        email: string,
-        name: string,
-        issue: Issue
-    ): Promise<void> {
-        try {
-            await this.resend.emails.send({
-                from: this.fromEmail,
-                to: email,
-                subject: `New Security Issue Created: ${issue.title}`,
-                html: this.getIssueCreatedTemplate(name, issue),
-            });
-        } catch (error) {
-            console.error("Failed to send issue created email:", error);
-        }
+  async sendProfileUpdatedEmail(email: string, name: string): Promise<void> {
+    if (!this.resend) return;
+    try {
+      await this.resend.emails.send({
+        from: this.fromEmail,
+        to: email,
+        subject: "Profile Updated Successfully - ApniSec",
+        html: this.getProfileUpdatedTemplate(name),
+      });
+    } catch (error) {
+      console.error("Failed to send profile updated email:", error);
     }
+  }
 
-    async sendProfileUpdatedEmail(email: string, name: string): Promise<void> {
-        try {
-            await this.resend.emails.send({
-                from: this.fromEmail,
-                to: email,
-                subject: "Profile Updated Successfully - ApniSec",
-                html: this.getProfileUpdatedTemplate(name),
-            });
-        } catch (error) {
-            console.error("Failed to send profile updated email:", error);
-        }
-    }
-
-    private getWelcomeEmailTemplate(name: string): string {
-        return `
+  private getWelcomeEmailTemplate(name: string): string {
+    return `
       <!DOCTYPE html>
       <html>
         <head>
@@ -127,16 +131,16 @@ export class EmailService {
         </body>
       </html>
     `;
-    }
+  }
 
-    private getIssueCreatedTemplate(name: string, issue: Issue): string {
-        const issueTypeNames: Record<string, string> = {
-            CLOUD_SECURITY: "Cloud Security",
-            REDTEAM_ASSESSMENT: "Redteam Assessment",
-            VAPT: "VAPT (Vulnerability Assessment & Penetration Testing)",
-        };
+  private getIssueCreatedTemplate(name: string, issue: any): string {
+    const issueTypeNames: Record<string, string> = {
+      CLOUD_SECURITY: "Cloud Security",
+      REDTEAM_ASSESSMENT: "Redteam Assessment",
+      VAPT: "VAPT (Vulnerability Assessment & Penetration Testing)",
+    };
 
-        return `
+    return `
       <!DOCTYPE html>
       <html>
         <head>
@@ -184,13 +188,13 @@ export class EmailService {
             }
             .badge-${issue.priority.toLowerCase()} {
               background-color: ${issue.priority === "CRITICAL"
-                ? "#dc3545"
-                : issue.priority === "HIGH"
-                    ? "#fd7e14"
-                    : issue.priority === "MEDIUM"
-                        ? "#ffc107"
-                        : "#28a745"
-            };
+        ? "#dc3545"
+        : issue.priority === "HIGH"
+          ? "#fd7e14"
+          : issue.priority === "MEDIUM"
+            ? "#ffc107"
+            : "#28a745"
+      };
               color: white;
             }
           </style>
@@ -225,10 +229,10 @@ export class EmailService {
         </body>
       </html>
     `;
-    }
+  }
 
-    private getProfileUpdatedTemplate(name: string): string {
-        return `
+  private getProfileUpdatedTemplate(name: string): string {
+    return `
       <!DOCTYPE html>
       <html>
         <head>
@@ -279,5 +283,5 @@ export class EmailService {
         </body>
       </html>
     `;
-    }
+  }
 }
