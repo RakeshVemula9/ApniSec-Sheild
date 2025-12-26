@@ -5,11 +5,12 @@ import { ApiResponse } from "@/core/utils/Response";
 
 export const runtime = "nodejs";
 
-const handler = new AuthHandler();
-const rateLimiter = RateLimiter.getInstance();
 
 export async function GET(request: NextRequest) {
     try {
+        const handler = new AuthHandler();
+        const rateLimiter = RateLimiter.getInstance();
+        
         const ip = request.headers.get("x-forwarded-for") ||
             request.headers.get("x-real-ip") ||
             "unknown";
