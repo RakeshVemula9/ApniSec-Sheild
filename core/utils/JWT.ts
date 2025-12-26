@@ -7,7 +7,7 @@ export class JWT {
     private static expiresIn: string = process.env.JWT_EXPIRES_IN || "7d";
 
     static sign(payload: object): string {
-        return jwt.sign(payload, this.secret, { expiresIn: this.expiresIn });
+        return jwt.sign(payload, this.secret as jwt.Secret, { expiresIn: this.expiresIn } as jwt.SignOptions);
     }
 
     static verify(token: string): any {

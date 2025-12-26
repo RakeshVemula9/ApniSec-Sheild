@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { User } from "@prisma/client";
+import type { User } from "@prisma/client";
 
 // User Repository - Data Access Layer
 export class UserRepository {
@@ -15,7 +15,7 @@ export class UserRepository {
         });
     }
 
-    async findById(id: string): Promise<User | null> {
+    async findById(id: string): Promise<Omit<User, 'password'> | null> {
         return prisma.user.findUnique({
             where: { id },
             select: {
@@ -28,7 +28,7 @@ export class UserRepository {
         });
     }
 
-    async update(id: string, data: Partial<{ name: string; email: string }>): Promise<User> {
+    async update(id: string, data: Partial<{ name: string; email: string }>): Promise<Omit<User, 'password'>> {
         return prisma.user.update({
             where: { id },
             data,

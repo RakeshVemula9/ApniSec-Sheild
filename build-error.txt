@@ -1,0 +1,116 @@
+﻿Γû▓ Next.js 16.1.1 (Turbopack)
+- Environments: .env
+
+  Creating an optimized production build ...
+Γ£ô Compiled successfully in 4.6s
+  Running TypeScript ...
+node.exe : Failed to 
+compile.
+At D:\mernstack\npx.p
+s1:29 char:3
++   & $NODE_EXE 
+$NPX_CLI_JS $args
++   ~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
+    + CategoryInfo   
+           : NotSpe  
+  cified: (Failed    
+ to compile.:Stri    
+ng) [], RemoteEx    
+ception
+    + FullyQualified 
+   ErrorId : Native  
+  CommandError
+ 
+
+./core/utils/JWT.ts:1
+0:20
+Type error: No 
+overload matches 
+this call.
+  Overload 1 of 5, 
+'(payload: string | 
+object | Buffer<Array
+BufferLike>, 
+secretOrPrivateKey: 
+null, options?: 
+(SignOptions & { 
+algorithm: "none"; 
+}) | undefined): 
+string', gave the 
+following error.
+    Argument of type 
+'string' is not 
+assignable to 
+parameter of type 
+'null'.
+  Overload 2 of 5, 
+'(payload: string | 
+object | Buffer<Array
+BufferLike>, 
+secretOrPrivateKey: B
+uffer<ArrayBufferLike
+> | Secret | 
+PrivateKeyInput | 
+JsonWebKeyInput, 
+options?: 
+SignOptions | 
+undefined): string', 
+gave the following 
+error.
+    Type 'string' is 
+not assignable to 
+type 'number | 
+StringValue | 
+undefined'.
+  Overload 3 of 5, 
+'(payload: string | 
+object | Buffer<Array
+BufferLike>, 
+secretOrPrivateKey: B
+uffer<ArrayBufferLike
+> | Secret | 
+PrivateKeyInput | 
+JsonWebKeyInput, 
+callback: 
+SignCallback): 
+void', gave the 
+following error.
+    Object literal 
+may only specify 
+known properties, 
+and 'expiresIn' does 
+not exist in type 
+'SignCallback'.
+
+[0m [90m  8 |[39m
+ [90m  9 |[39m     
+[36mstatic[39m sign
+(payload[33m:[39m 
+object)[33m:[39m 
+string {
+[31m[1m>[22m[39m
+[90m 10 |[39m       
+  [36mreturn[39m jw
+t[33m.[39msign(payl
+oad[33m,[39m [36mt
+his[39m[33m.[39mse
+cret[33m,[39m { 
+expiresIn[33m:[39m 
+[36mthis[39m[33m.
+[39mexpiresIn 
+})[33m;[39m
+ [90m    |[39m     
+               
+[31m[1m^[22m[39m
+ [90m 11 |[39m     
+}
+ [90m 12 |[39m
+ [90m 13 |[39m     
+[36mstatic[39m veri
+fy(token[33m:[39m 
+string)[33m:[39m 
+any {[0m
+Next.js build worker 
+exited with code: 1 
+and signal: null

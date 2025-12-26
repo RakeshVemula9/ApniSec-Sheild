@@ -25,7 +25,7 @@ export class AuthValidator {
             return registerSchema.parse(data);
         } catch (error) {
             if (error instanceof z.ZodError) {
-                throw new ValidationError("Validation failed", error.errors);
+                throw new ValidationError("Validation failed", error.issues);
             }
             throw error;
         }
@@ -36,7 +36,7 @@ export class AuthValidator {
             return loginSchema.parse(data);
         } catch (error) {
             if (error instanceof z.ZodError) {
-                throw new ValidationError("Validation failed", error.errors);
+                throw new ValidationError("Validation failed", error.issues);
             }
             throw error;
         }

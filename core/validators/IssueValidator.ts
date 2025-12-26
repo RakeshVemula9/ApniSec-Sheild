@@ -29,7 +29,7 @@ export class IssueValidator {
             return createIssueSchema.parse(data);
         } catch (error) {
             if (error instanceof z.ZodError) {
-                throw new ValidationError("Validation failed", error.errors);
+                throw new ValidationError("Validation failed", error.issues);
             }
             throw error;
         }
@@ -40,7 +40,7 @@ export class IssueValidator {
             return updateIssueSchema.parse(data);
         } catch (error) {
             if (error instanceof z.ZodError) {
-                throw new ValidationError("Validation failed", error.errors);
+                throw new ValidationError("Validation failed", error.issues);
             }
             throw error;
         }
